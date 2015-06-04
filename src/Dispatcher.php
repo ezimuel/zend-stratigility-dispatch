@@ -37,8 +37,13 @@ class Dispatcher
                 sprintf("The route %s doesn't have an action to dispatch", $route->name)
             );
         }
+
         if (is_callable($route->params['action'])) {
-            return $route->params['action']($request, $response, $next);
+            return call_user_func_array($route->params['action'], array(
+                $request,
+                $response,
+                $next,
+            ));
         } elseif (is_string($route->params['action'])) {
             $action = new $route->params['action'];
             if (is_callable($action)) {
