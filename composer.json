@@ -1,0 +1,32 @@
+{
+    "name": "ezimuel/zend-stratigility-dispatch",
+    "description": "Zend Stratigility Dispatch proposal for PHP middleware application based on PSR-7 standard",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "http",
+        "psr-7",
+        "middleware",
+        "route",
+        "dispatch"
+    ],
+    "require": {
+        "php": ">=5.5",
+        "psr/http-message": "~1.0",
+        "aura/router" : "~2.2"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "4.6.*",
+        "zendframework/zend-diactoros": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zend\\Stratigility\\Dispatch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Stratigility\\Dispatch\\": "test/"
+        }
+    }
+}
