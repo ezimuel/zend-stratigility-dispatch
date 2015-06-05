@@ -64,4 +64,16 @@ class DispatcherTest extends TestCase
 
         $this->assertTrue($result);
     }
+
+    public function testDispatchCallableStringClassMethodAction()
+    {
+        $this->router->add('myclass', '/')
+                     ->addValues([ 'action' => 'ZendTest\Stratigility\Dispatch\TestAsset\ClassMethod::myMethod' ]);
+
+        $dispatch = new Dispatcher($this->router);
+        $this->request = $this->request->withUri(new Uri('/'));
+        $result = $dispatch($this->request, $this->response, function(){});
+
+        $this->assertTrue($result);
+    }
 }
