@@ -9,49 +9,43 @@
 
 namespace Zend\Stratigility\Dispatch;
 
-use Aura\Router\Generator;
-use Aura\Router\RouteCollection;
-use Aura\Router\RouteFactory;
-use Aura\Router\Router;
-
 class MiddlewareDispatch
 {
+    const DEFAULT_ROUTER = 'Zend\Stratigility\Dispatch\Router\Aura';
+
     public static function factory(array $config)
     {
-        $routerClass = isset($config['router']) ? $config['router'] : 'Aura\Router\Route';
-        $router = new Router(
-            new RouteCollection(new RouteFactory($routerClass)),
-            new Generator()
-        );
-        self::readConfig($router, $config);
-        return new Dispatcher($router);
+        self::checkConfig($config);
+        $router = isset($config['router']['adapter']) ?
+                  $config['router']['adapter'] :
+                  self::DEFAULT_ROUTER;
+        return new Dispatcher(new $router($config));
     }
 
-    protected static function readConfig(Router $router, array $config)
+    protected static function checkConfig(array $config)
     {
-        if (!isset($config['route'])) {
+        if (isset($config['router']['adapter'])) {
+            if (!class_exists($config['router']['adapter'])) {
+                throw new Exception\InvalidArgumentException(
+                    sprintf("The router specified %s doesn't exist", $config['router'])
+                );
+            }
+        }
+        if (!isset($config['routes'])) {
             throw new Exception\InvalidArgumentException(
-                sprintf("The route part is missing in the configuration")
+                sprintf("The routes part is missing in the configuration")
             );
         }
-        foreach ($config['route'] as $name => $data) {
+        foreach ($config['routes'] as $name => $data) {
             if (!isset($data['action'])) {
                 throw new Exception\InvalidArgumentException(
                     sprintf("The action parameter is missing in route %s", $name)
                 );
             }
-            $router->add($name, $data['url']);
-            if (!isset($data['values'])) {
-                $data['values'] = [];
-            }
-            $data['values']['action'] = $data['action'];
-            if (!isset($data['tokens'])) {
-              $router->add($name, $data['url'])
-                     ->addValues($data['values']);
-            } else {
-              $router->add($name, $data['url'])
-                     ->addTokens($data['tokens'])
-                     ->addValues($data['values']);
+            if (!isset($data['url'])) {
+                throw new Exception\InvalidArgumentException(
+                    sprintf("The url parameter is missing in route %s", $name)
+                );
             }
         }
     }
