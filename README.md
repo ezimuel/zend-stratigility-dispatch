@@ -6,7 +6,7 @@ standard.
 For the routing part we used an pluggable adapter architecture using a [RouterInterface](https://github.com/ezimuel/zend-stratigility-dispatch/tree/master/src/Router/RouterInterface.php)
 
 We provide a default router adapter using the [Aura.Router](https://github.com/auraphp/Aura.Router) library.
-You can write your adapter implementing the `Zend\Stratigility\Dispatch\Router\RouteInterface`.
+You can write your adapter implementing the `Zend\Stratigility\Dispatch\Router\RouterInterface`.
 
 Installation
 ============
