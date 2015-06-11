@@ -13,6 +13,10 @@ class MiddlewareDispatch
 {
     const DEFAULT_ROUTER = 'Zend\Stratigility\Dispatch\Router\Aura';
 
+    /**
+     * Create new Dispatcher instance
+     * @param array $config
+     */
     public static function factory(array $config)
     {
         self::checkConfig($config);
@@ -22,6 +26,11 @@ class MiddlewareDispatch
         return new Dispatcher(new $router($config));
     }
 
+    /**
+     * Check config
+     * @param array $config
+     * @throws Exception\InvalidArgumentException
+     */
     protected static function checkConfig(array $config)
     {
         if (isset($config['router']['adapter'])) {

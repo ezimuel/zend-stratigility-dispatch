@@ -29,6 +29,10 @@ class Aura implements RouterInterface
      */
     protected $route;
 
+    /**
+     * Construct
+     * @param array $config
+     */
     public function __construct(array $config)
     {
         $this->router = new Router(
