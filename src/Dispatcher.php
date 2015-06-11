@@ -18,7 +18,14 @@ use Zend\Stratigility\Dispatch\Router\RouterInterface;
 
 class Dispatcher
 {
+    /**
+     * @var RouterInterface
+     */
     protected $router;
+
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     /**
@@ -35,6 +42,15 @@ class Dispatcher
         }
     }
 
+    /**
+     * Invoke
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callable $next
+     * @throws Exception\InvalidArgumentException
+     * @return callable
+     */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         $path  = $request->getUri()->getPath();
@@ -80,21 +96,37 @@ class Dispatcher
         );
     }
 
+    /**
+     * Set Router
+     * @param RouterInterface $router
+     */
     public function setRouter(RouterInterface $router)
     {
         $this->router = $router;
     }
 
+    /**
+     * get Router
+     * @return RouterInterface
+     */
     public function getRouter()
     {
         return $this->router;
     }
 
+    /**
+     * Set Container
+     * @param ContainerInterface $container
+     */
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * get Container
+     * @return ContainerInterface
+     */
     public function getContainer()
     {
         return $this->container;
