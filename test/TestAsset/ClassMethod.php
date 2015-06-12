@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class ClassMethod
 {
-    public static function MyMethod(ServerRequestInterface $request, ResponseInterface $response, callable $next)
+    public static function myMethod(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         return true;
     }

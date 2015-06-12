@@ -45,9 +45,9 @@ class Dispatcher
     /**
      * Invoke
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param callable $next
+     * @param  ServerRequestInterface $request
+     * @param  ResponseInterface $response
+     * @param  callable $next
      * @throws Exception\InvalidArgumentException
      * @return callable
      */
@@ -67,23 +67,34 @@ class Dispatcher
             );
         }
         if (is_callable($action)) {
-            return call_user_func_array($action, array(
+            return call_user_func_array($action, [
                 $request,
                 $response,
                 $next,
-            ));
+            ]);
         } elseif (is_string($action)) {
-            // try to get the action name from the container
+            // try to get the action name from the container (if exists)
             if ($this->container && $this->container->has($action)) {
                 try {
                     $call = $this->container->get($action);
-                    return $call($request, $response, $next);
+                    if (is_callable($call)) {
+                        return call_user_func_array($call, [
+                            $request,
+                            $response,
+                            $next,
+                        ]);
+                    }
                 } catch (ContainerException $e) {
                     throw new Exception\InvalidArgumentException(
-                        sprintf("The action class %s, from the container, has thrown the exception: %s", $action, $e->getMessage())
+                        sprintf(
+                            "The action class %s, from the container, has thrown the exception: %s",
+                            $action,
+                            $e->getMessage()
+                        )
                     );
                 }
             }
+            // try to instanciate the class name (if exists) and invoke it (if invokables)
             if (class_exists($action)) {
                 $call = new $action;
                 if (is_callable($call)) {
@@ -98,6 +109,7 @@ class Dispatcher
 
     /**
      * Set Router
+     *
      * @param RouterInterface $router
      */
     public function setRouter(RouterInterface $router)
@@ -106,7 +118,8 @@ class Dispatcher
     }
 
     /**
-     * get Router
+     * Get Router
+     *
      * @return RouterInterface
      */
     public function getRouter()
@@ -116,6 +129,7 @@ class Dispatcher
 
     /**
      * Set Container
+     *
      * @param ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container)
@@ -124,7 +138,8 @@ class Dispatcher
     }
 
     /**
-     * get Container
+     * Get Container
+     *
      * @return ContainerInterface
      */
     public function getContainer()

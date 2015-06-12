@@ -8,6 +8,7 @@ use Zend\Stratigility\Dispatch\Dispatcher;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Uri;
+use ZendTest\Stratigility\Dispatch\TestAsset\Container;
 
 class DispatcherTest extends TestCase
 {
@@ -16,6 +17,45 @@ class DispatcherTest extends TestCase
 
         $this->request  = new ServerRequest();
         $this->response = new Response();
+    }
+
+    public function testConstruct()
+    {
+        $dispatch = new Dispatcher(new Aura([ 'routes' => [] ]));
+        $this->assertTrue($dispatch instanceof Dispatcher);
+    }
+
+    public function testConstructWithContainer()
+    {
+        $container = new Container();
+        $dispatch  = new Dispatcher(new Aura([ 'routes' => [] ]), $container);
+        $this->assertTrue($dispatch instanceof Dispatcher);
+    }
+
+    public function testSetRouter()
+    {
+        $dispatch = new Dispatcher(new Aura([ 'routes' => [] ]));
+        $config = [
+            'routes' => [
+                'home' => [
+                    'url' => '/',
+                    'action' => 'ZendTest\Stratigility\Dispatch\TestAsset\Home'
+                ]
+            ]
+        ];
+        $router = new Aura($config);
+        $dispatch->setRouter($router);
+        $this->assertEquals($router, $dispatch->getRouter());
+
+    }
+
+    public function testSetContainer()
+    {
+        $container = new Container();
+        $dispatch  = new Dispatcher(new Aura([ 'routes' => [] ]));
+
+        $dispatch->setContainer($container);
+        $this->assertEquals($container, $dispatch->getContainer());
     }
 
     public function testDispatchInvokableClass()
@@ -31,7 +71,8 @@ class DispatcherTest extends TestCase
 
         $dispatch = new Dispatcher(new Aura($config));
         $this->request = $this->request->withUri(new Uri($config['routes']['home']['url']));
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
 
         $this->assertTrue($result);
     }
@@ -52,7 +93,8 @@ class DispatcherTest extends TestCase
 
         $dispatch = new Dispatcher(new Aura($config));
         $this->request = $this->request->withUri(new Uri($config['routes']['home']['url']));
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
     }
 
     public function testDispatchCallable()
@@ -61,8 +103,8 @@ class DispatcherTest extends TestCase
             'routes' => [
                 'page' => [
                     'url' => '/page',
-                    'action' => function($request, $response, $next){
-                       return true;
+                    'action' => function ($request, $response, $next) {
+                        return true;
                     }
                 ]
             ]
@@ -70,7 +112,8 @@ class DispatcherTest extends TestCase
 
         $dispatch = new Dispatcher(new Aura($config));
         $this->request = $this->request->withUri(new Uri($config['routes']['page']['url']));
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
 
         $this->assertTrue($result);
     }
@@ -88,7 +131,8 @@ class DispatcherTest extends TestCase
 
         $dispatch = new Dispatcher(new Aura($config));
         $this->request = $this->request->withUri(new Uri($config['routes']['myclass']['url']));
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
 
         $this->assertTrue($result);
     }

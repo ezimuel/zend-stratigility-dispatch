@@ -17,8 +17,9 @@
         "aura/router" : "~2.2"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "4.6.*",
-        "zendframework/zend-diactoros": "~1.0"
+        "phpunit/PHPUnit": "~4.6",
+        "zendframework/zend-diactoros": "~1.0",
+        "squizlabs/php_codesniffer": "^2.3.1"
     },
     "autoload": {
         "psr-4": {

@@ -1,12 +1,18 @@
 # zend-stratigility-dispatch
 
-This component is a proposal for a middleware dispatcher compliant with [PSR-7](http://www.php-fig.org/psr/psr-7/)
-standard.
+Master:
+[![Build status][Master image]][Master]
+[![Coverage Status][Master coverage image]][Master coverage]
 
-For the routing part we used an pluggable adapter architecture using a [RouteInterface](https://github.com/ezimuel/zend-stratigility-dispatch/tree/master/src/Router/RouteInterface.php)
+This component is a proposal for a PHP middleware dispatcher compliant with [PSR-7](http://www.php-fig.org/psr/psr-7/)
+standard. This components has been developed with [zend-stratigility](https://github.com/zendframework/zend-stratigility)
+in mind, but can be used in any PSR-7 middleware application.
+
+For the routing part we used a pluggable adapter architecture using a simple [RouterInterface](https://github.com/ezimuel/zend-stratigility-dispatch/tree/master/src/Router/RouterInterface.php)
 
 We provide a default router adapter using the [Aura.Router](https://github.com/auraphp/Aura.Router) library.
-You can write your adapter implementing the `Zend\Stratigility\Dispatch\Router\RouteInterface`.
+
+You can write your adapter implementing the `Zend\Stratigility\Dispatch\Router\RouterInterface`.
 
 Installation
 ============
@@ -22,7 +28,7 @@ Basic usage
 ===========
 
 The main goal of this component is to dispatch a PHP middleware application using
-a simple configuration array in PHP, like the following:
+a simple configuration array, like the following:
 
 ```php
 <?php
@@ -57,10 +63,13 @@ return [
 ```
 The `router` key specifies the routing adapter to use, the default is the Aura.Router.
 All the routes are specified in the `routes` array. For each route you need to specify
-at least a `url` and an `action` (callable, class name, static function, etc).
+at least a `url` and an `action` that can be a callable, a class name, a static function
+name, etc.
 
-In order to use the dispatcher you can use the `MiddlewareDispatch::factory` to
-create the dispatcher and attach it to a zend-stratigility application:
+To use the dispatcher you can call the `MiddlewareDispatch::factory` that create
+an instance of Dispatcher. With this istance in place you can just attach it to a
+[zend-stratigility](https://github.com/zendframework/zend-stratigility) application
+using the `MiddlewarePipe` component:
 
 ```php
 use Zend\Stratigility\MiddlewarePipe;
@@ -81,11 +90,11 @@ where the previous configuration file is stored in `../config/route.php` file.
 Using a Container
 =================
 
-If you want you can specify actions from a Container. We used the ContainerInterface of
-the [Container Interoperability](https://github.com/container-interop/container-interop)
-project. Right now, this is a proposal for a [PSR](http://www.php-fig.org/) standard.
+If you want you can consume actions from a DI Container. We used the `ContainerInterface`
+of the [Container Interoperability](https://github.com/container-interop/container-interop)
+project. This is a proposal for a [PSR](http://www.php-fig.org/) standard.
 
-To use a Container you need to inject it in the dispatcher using the `setContainer()` method.
+To use a Container you need to inject in the dispatcher using the `setContainer()` method.
 
 Here is reported an example:
 

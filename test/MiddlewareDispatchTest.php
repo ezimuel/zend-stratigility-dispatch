@@ -8,6 +8,8 @@ use Zend\Stratigility\Dispatch\Dispatcher;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Uri;
+use ZendTest\Stratigility\Dispatch\TestAsset\Container;
+use ZendTest\Stratigility\Dispatch\TestAsset\Test;
 
 class MiddlewareDispatchTest extends TestCase
 {
@@ -31,7 +33,8 @@ class MiddlewareDispatchTest extends TestCase
         $request  = $request->withUri(new Uri('/'));
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 
     public function testRoutingWithCallable()
@@ -42,7 +45,8 @@ class MiddlewareDispatchTest extends TestCase
         $request  = $request->withUri(new Uri('/page'));
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 
     public function testRoutingWithClassNameAndParams()
@@ -53,9 +57,27 @@ class MiddlewareDispatchTest extends TestCase
         $request  = $request->withUri(new Uri('/search'));
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
 
         $request  = $request->withUri(new Uri('/search/test'));
-        $this->assertEquals('test', $dispatcher($request, $response, function(){}));
+        $this->assertEquals('test', $dispatcher($request, $response, function () {
+        }));
+    }
+
+    public function testRoutingWithContainer()
+    {
+        $container = new Container();
+        $container->set('ObjectFromContainer', new Test());
+
+        $dispatcher = MiddlewareDispatch::factory($this->config);
+        $dispatcher->setContainer($container);
+
+        $request  = new ServerRequest();
+        $request  = $request->withUri(new Uri('/test'));
+        $response = new Response();
+
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 }

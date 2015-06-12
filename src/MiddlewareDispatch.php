@@ -15,6 +15,7 @@ class MiddlewareDispatch
 
     /**
      * Create new Dispatcher instance
+     *
      * @param array $config
      */
     public static function factory(array $config)
@@ -27,8 +28,9 @@ class MiddlewareDispatch
     }
 
     /**
-     * Check config
-     * @param array $config
+     * Check configuration
+     *
+     * @param  array $config
      * @throws Exception\InvalidArgumentException
      */
     protected static function checkConfig(array $config)

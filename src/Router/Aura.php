@@ -47,10 +47,10 @@ class Aura implements RouterInterface
             }
             $data['values']['action'] = $data['action'];
             if (!isset($data['tokens'])) {
-              $this->router->add($name, $data['url'])
+                $this->router->add($name, $data['url'])
                            ->addValues($data['values']);
             } else {
-              $this->router->add($name, $data['url'])
+                $this->router->add($name, $data['url'])
                            ->addTokens($data['tokens'])
                            ->addValues($data['values']);
             }
@@ -65,7 +65,7 @@ class Aura implements RouterInterface
     public function match($path, $params)
     {
         $this->route = $this->router->match($path, $params);
-        return (!empty($this->route));
+        return (false !== $this->route);
     }
 
     /**

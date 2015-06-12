@@ -4,7 +4,8 @@ namespace ZendTest\Stratigility\Dispatch\TestAsset;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Page {
+class Page
+{
 
     protected $bar;
 
