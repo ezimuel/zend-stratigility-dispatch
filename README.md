@@ -1,8 +1,6 @@
 # zend-stratigility-dispatch
 
-Master:
-[![Build status][Master image]][Master]
-[![Coverage Status][Master coverage image]][Master coverage]
+[![Build Status](https://travis-ci.org/ezimuel/zend-stratigility-dispatch.svg?branch=master)](https://travis-ci.org/ezimuel/zend-stratigility-dispatch)
 
 This component is a proposal for a PHP middleware dispatcher compliant with [PSR-7](http://www.php-fig.org/psr/psr-7/)
 standard. This components has been developed with [zend-stratigility](https://github.com/zendframework/zend-stratigility)
