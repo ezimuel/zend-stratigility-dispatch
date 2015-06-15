@@ -1,5 +1,5 @@
 {
-    "name": "ezimuel/zend-stratigility-dispatch",
+    "name": "zendframework/zend-stratigility-dispatch",
     "description": "Zend Stratigility Dispatch proposal for PHP middleware application based on PSR-7 standard",
     "type": "library",
     "license": "BSD-3-Clause",
