@@ -30,16 +30,41 @@ class Aura implements RouterInterface
     protected $route;
 
     /**
-     * Construct
-     * @param array $config
+     * Router configuration
+     *
+     * @var array
      */
-    public function __construct(array $config)
+    protected $config;
+
+    /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->createRouter();
+    }
+
+    /**
+     * Create the Aura router instance
+     */
+    protected function createRouter()
     {
         $this->router = new Router(
             new RouteCollection(new RouteFactory()),
             new Generator()
         );
+    }
 
+    /**
+     * Set config
+     *
+     * @param array $config
+     */
+    public function setConfig(array $config)
+    {
+        if (!empty($this->config)) {
+            $this->createRouter();
+        }
         foreach ($config['routes'] as $name => $data) {
             $this->router->add($name, $data['url']);
             if (!isset($data['values'])) {
@@ -48,13 +73,24 @@ class Aura implements RouterInterface
             $data['values']['action'] = $data['action'];
             if (!isset($data['tokens'])) {
                 $this->router->add($name, $data['url'])
-                           ->addValues($data['values']);
+                             ->addValues($data['values']);
             } else {
                 $this->router->add($name, $data['url'])
-                           ->addTokens($data['tokens'])
-                           ->addValues($data['values']);
+                             ->addTokens($data['tokens'])
+                             ->addValues($data['values']);
             }
         }
+        $this->config = $config;
+    }
+
+    /**
+     * Get config
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**

@@ -38,14 +38,19 @@ return [
         // example of action class without dependencies
         'home' => [
             'url'    => '/',
-            'action' => 'App/Home'
+            'action' => 'App/Action/Home'
         ],
-        // example of action class with dependencies using a factory
+        // example of factory action class
+        'example' => [
+            'url'    => '/example',
+            'action' => 'App/Action/ExampleFactory::factory'
+        ],
+        // example of action class with dependencies using an anonymous function
         'page' => [
             'url' => '/page',
             'action' => function($request, $response, $next) {
-                $bar  = new ZendTest\Stratigility\Dispatch\TestAsset\Bar();
-                $page = new ZendTest\Stratigility\Dispatch\TestAsset\Page($bar);
+                $bar  = new App/Model/Bar();
+                $page = new App/Action/Page($bar);
                 return $page->action($request, $response, $next);
             }
         ],

@@ -21,10 +21,12 @@ class MiddlewareDispatch
     public static function factory(array $config)
     {
         self::checkConfig($config);
-        $router = isset($config['router']['adapter']) ?
-                  $config['router']['adapter'] :
-                  self::DEFAULT_ROUTER;
-        return new Dispatcher(new $router($config));
+        $adapter = isset($config['router']['adapter']) ?
+                   $config['router']['adapter'] :
+                   self::DEFAULT_ROUTER;
+        $router  = new $adapter();
+        $router->setConfig($config);
+        return new Dispatcher($router);
     }
 
     /**

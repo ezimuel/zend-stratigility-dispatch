@@ -12,11 +12,6 @@ namespace Zend\Stratigility\Dispatch\Router;
 interface RouterInterface
 {
     /**
-     * @param array $config
-     */
-    public function __construct(array $config);
-
-    /**
      * @param  string $patch
      * @param  array $params
      * @return boolean
@@ -37,4 +32,14 @@ interface RouterInterface
      * @return mixed
      */
     public function getMatchedAction();
+
+    /**
+     * @param array $config
+     */
+    public function setConfig(array $config);
+
+    /**
+     * @return array
+     */
+    public function getConfig();
 }

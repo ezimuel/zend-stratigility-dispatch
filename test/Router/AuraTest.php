@@ -7,14 +7,13 @@ use Zend\Stratigility\Dispatch\Router\Aura;
 
 class AuraTest extends TestCase
 {
-    public function testConstructorWithEmptyRoutes()
+    public function testConstructor()
     {
-        $config = [ 'routes' => [] ];
-        $aura = new Aura($config);
+        $aura = new Aura();
         $this->assertTrue($aura instanceof Aura);
     }
 
-    public function testConstructoreWithRoutes()
+    public function testSetConfig()
     {
         $config = [ 'routes' => [
             'home' => [
@@ -24,8 +23,9 @@ class AuraTest extends TestCase
                 }
             ]
         ]];
-        $aura = new Aura($config);
-        $this->assertTrue($aura instanceof Aura);
+        $aura = new Aura();
+        $aura->setConfig($config);
+        $this->assertEquals($config, $aura->getConfig());
     }
 
     public function testMatch()
@@ -40,7 +40,8 @@ class AuraTest extends TestCase
                 ]
             ]
         ];
-        $aura = new Aura($config);
+        $aura = new Aura();
+        $aura->setConfig($config);
 
         $server = [
             'REQUEST_METHOD' => 'GET'
@@ -66,7 +67,8 @@ class AuraTest extends TestCase
                 ]
             ]
         ];
-        $aura = new Aura($config);
+        $aura = new Aura();
+        $aura->setConfig($config);
 
         $server = [
             'REQUEST_METHOD' => 'GET'
@@ -96,7 +98,8 @@ class AuraTest extends TestCase
                 ]
             ]
         ];
-        $aura = new Aura($config);
+        $aura = new Aura();
+        $aura->setConfig($config);
 
         $server = [
             'REQUEST_METHOD' => 'GET'
@@ -116,7 +119,8 @@ class AuraTest extends TestCase
                 ]
             ]
         ];
-        $aura = new Aura($config);
+        $aura = new Aura();
+        $aura->setConfig($config);
 
         $server = [
             'REQUEST_METHOD' => 'GET'
@@ -135,7 +139,8 @@ class AuraTest extends TestCase
                 ]
             ]
         ];
-        $aura = new Aura($config);
+        $aura = new Aura();
+        $aura->setConfig($config);
 
         $this->assertTrue($aura->match('/test', $server));
         $action = $aura->getMatchedAction();
