@@ -65,7 +65,33 @@ class Aura implements RouterInterface
         if (!empty($this->config)) {
             $this->createRouter();
         }
+
         foreach ($config['routes'] as $name => $data) {
+            if (isset($data['children'])) {
+                $this->router->attach($name, $data['url'], function ($router) use ($data) {
+                    if (isset($data['tokens'])) {
+                        $router->addTokens($data['tokens']);
+                    }
+                    if (isset($data['values'])) {
+                        $router->addValues($data['values']);
+                    }
+
+                    foreach ($data['children'] as $name => $data) {
+                        $data['values'] = isset($data['values']) ? $data['values'] : [];
+                        $data['values']['action'] = $data['action'];
+
+                        $route = $router->add($name, $data['url']);
+                        $route->addValues($data['values']);
+
+                        if (isset($data['tokens'])) {
+                            $route->addTokens($data['tokens']);
+                        }
+                    }
+                });
+
+                continue ;
+            }
+
             $this->router->add($name, $data['url']);
             if (!isset($data['values'])) {
                 $data['values'] = [];
