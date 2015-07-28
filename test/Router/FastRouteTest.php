@@ -3,27 +3,24 @@
 namespace ZendTest\Stratigility\Dispatch\Router;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Stratigility\Dispatch\Router\Aura;
+use Zend\Stratigility\Dispatch\Router\FastRoute;
 
-class AuraTest extends TestCase
+class FastRouteTest extends TestCase
 {
     public function testMatchedParams()
     {
         $config = [
             'routes' => [
                 'home' => [
-                    'url'    => '/test{/id}',
+                    'url'    => '/test[/{id:\d+}]',
                     'action' => function () {
                         return true;
                     },
-                    'tokens' => [
-                       'id' => '(\d+)?'
-                    ],
                     'methods' => [ 'POST']
                 ]
             ]
         ];
-        $router = new Aura();
+        $router = new FastRoute();
         $router->setConfig($config);
 
         $server = [

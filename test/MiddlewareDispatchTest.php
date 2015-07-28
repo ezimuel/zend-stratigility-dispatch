@@ -29,40 +29,33 @@ class MiddlewareDispatchTest extends TestCase
     {
         $dispatcher = MiddlewareDispatch::factory($this->config);
 
-        $request  = new ServerRequest();
-        $request  = $request->withUri(new Uri('/'));
+        $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function () {
-        }));
+        $this->assertTrue($dispatcher($request, $response, function(){}));
     }
 
     public function testRoutingWithCallable()
     {
         $dispatcher = MiddlewareDispatch::factory($this->config);
 
-        $request  = new ServerRequest();
-        $request  = $request->withUri(new Uri('/page'));
+        $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/page');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function () {
-        }));
+        $this->assertTrue($dispatcher($request, $response, function(){}));
     }
 
     public function testRoutingWithClassNameAndParams()
     {
         $dispatcher = MiddlewareDispatch::factory($this->config);
 
-        $request  = new ServerRequest();
-        $request  = $request->withUri(new Uri('/search'));
+        $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/search');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function () {
-        }));
+        $this->assertTrue($dispatcher($request, $response, function(){}));
 
         $request  = $request->withUri(new Uri('/search/test'));
-        $this->assertEquals('test', $dispatcher($request, $response, function () {
-        }));
+        $this->assertEquals('test', $dispatcher($request, $response, function(){}));
     }
 
     public function testRoutingWithContainer()
@@ -73,11 +66,9 @@ class MiddlewareDispatchTest extends TestCase
         $dispatcher = MiddlewareDispatch::factory($this->config);
         $dispatcher->setContainer($container);
 
-        $request  = new ServerRequest();
-        $request  = $request->withUri(new Uri('/test'));
+        $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/test');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function () {
-        }));
+        $this->assertTrue($dispatcher($request, $response, function(){}));
     }
 }

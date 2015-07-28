@@ -15,7 +15,6 @@ class DispatcherTest extends TestCase
     public function setUp()
     {
         $this->router   = new Aura();
-        $this->request  = new ServerRequest();
         $this->response = new Response();
     }
 
@@ -48,7 +47,6 @@ class DispatcherTest extends TestCase
         $this->router->setConfig($config);
         $dispatch->setRouter($this->router);
         $this->assertEquals($this->router, $dispatch->getRouter());
-
     }
 
     public function testSetContainer()
@@ -71,11 +69,10 @@ class DispatcherTest extends TestCase
             ]
         ];
         $this->router->setConfig($config);
-        $dispatch = new Dispatcher($this->router);
-        $this->request = $this->request->withUri(new Uri($config['routes']['home']['url']));
-        $result = $dispatch($this->request, $this->response, function () {
-        });
+        $dispatch       = new Dispatcher($this->router);
+        $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['home']['url']);
 
+        $result = $dispatch($this->request, $this->response, function(){});
         $this->assertTrue($result);
     }
 
@@ -93,10 +90,10 @@ class DispatcherTest extends TestCase
             ]
         ];
         $this->router->setConfig($config);
-        $dispatch = new Dispatcher($this->router);
-        $this->request = $this->request->withUri(new Uri($config['routes']['home']['url']));
-        $result = $dispatch($this->request, $this->response, function () {
-        });
+        $dispatch       = new Dispatcher($this->router);
+        $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['home']['url']);
+
+        $result = $dispatch($this->request, $this->response, function(){});
     }
 
     public function testDispatchCallable()
@@ -112,11 +109,10 @@ class DispatcherTest extends TestCase
             ]
         ];
         $this->router->setConfig($config);
-        $dispatch = new Dispatcher($this->router);
-        $this->request = $this->request->withUri(new Uri($config['routes']['page']['url']));
-        $result = $dispatch($this->request, $this->response, function () {
-        });
+        $dispatch       = new Dispatcher($this->router);
+        $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['page']['url']);
 
+        $result = $dispatch($this->request, $this->response, function(){});
         $this->assertTrue($result);
     }
 
@@ -131,11 +127,10 @@ class DispatcherTest extends TestCase
             ]
         ];
         $this->router->setConfig($config);
-        $dispatch = new Dispatcher($this->router);
-        $this->request = $this->request->withUri(new Uri($config['routes']['myclass']['url']));
-        $result = $dispatch($this->request, $this->response, function () {
-        });
+        $dispatch       = new Dispatcher($this->router);
+        $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['myclass']['url']);
 
+        $result = $dispatch($this->request, $this->response, function(){});
         $this->assertTrue($result);
     }
 }

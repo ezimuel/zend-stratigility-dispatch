@@ -55,6 +55,7 @@ class Dispatcher
     {
         $path  = $request->getUri()->getPath();
         if (!$this->router->match($path, $request->getServerParams())) {
+            var_dump($path);
             return $next($request, $response);
         }
         foreach ($this->router->getMatchedParams() as $param => $value) {
@@ -98,7 +99,11 @@ class Dispatcher
             if (class_exists($action)) {
                 $call = new $action;
                 if (is_callable($call)) {
-                    return $call($request, $response, $next);
+                    return call_user_func_array($call, [
+                        $request,
+                        $response,
+                        $next,
+                    ]);
                 }
             }
         }

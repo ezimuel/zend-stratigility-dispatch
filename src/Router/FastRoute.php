@@ -8,26 +8,26 @@
  */
 namespace Zend\Stratigility\Dispatch\Router;
 
-use Aura\Router\Generator;
-use Aura\Router\RouteCollection;
-use Aura\Router\RouteFactory;
-use Aura\Router\Router;
+use FastRoute\DataGenerator\GroupCountBased as RouteGenerator;
+use FastRoute\Dispatcher\GroupCountBased as Dispatcher;
+use FastRoute\RouteCollector;
+use FastRoute\RouteParser\Std as RouteParser;
 
-class Aura implements RouterInterface
+class FastRoute implements RouterInterface
 {
     /**
-     * Aura router
+     * FastRoute router
      *
-     * @var Aura\Router\Router
+     * @var FastRoute\RouteCollector
      */
     protected $router;
 
     /**
-     * Matched Aura route
+     * Matched route data
      *
-     * @var Aura\Router\Route
+     * @var array
      */
-    protected $route;
+    protected $routeInfo;
 
     /**
      * Router configuration
@@ -45,14 +45,11 @@ class Aura implements RouterInterface
     }
 
     /**
-     * Create the Aura router instance
+     * Create the FastRoute Collector instance
      */
     protected function createRouter()
     {
-        $this->router = new Router(
-            new RouteCollection(new RouteFactory()),
-            new Generator()
-        );
+        $this->router = new RouteCollector(new RouteParser, new RouteGenerator);
     }
 
     /**
@@ -66,25 +63,12 @@ class Aura implements RouterInterface
             $this->createRouter();
         }
         foreach ($config['routes'] as $name => $data) {
-            $this->router->add($name, $data['url']);
-            if (!isset($data['values'])) {
-                $data['values'] = [];
-            }
-            $data['values']['action'] = $data['action'];
             if (isset($data['methods']) && is_array($data['methods'])) {
-                $methods = implode('|', $data['methods'] );
+                $methods = $data['methods'];
             } else {
-                $methods = 'GET';
+                $methods = ['GET'];
             }
-            $this->router->setServer(['REQUEST_METHOD' => $methods]);
-            if (!isset($data['tokens'])) {
-                $this->router->add($name, $data['url'])
-                             ->addValues($data['values']);
-            } else {
-                $this->router->add($name, $data['url'])
-                             ->addValues($data['values'])
-                             ->addTokens($data['tokens']);
-            }
+            $this->router->addRoute($methods, $data['url'], $name);
         }
         $this->config = $config;
     }
@@ -106,8 +90,13 @@ class Aura implements RouterInterface
      */
     public function match($path, $params)
     {
-        $this->route = $this->router->match($path, $params);
-        return (false !== $this->route);
+        $dispatcher = new Dispatcher($this->router->getData());
+        $result     = $dispatcher->dispatch($params['REQUEST_METHOD'], $path);
+        if ($result[0] != Dispatcher::FOUND) {
+            return false;
+        }
+        $this->routeInfo = $result;
+        return true;
     }
 
     /**
@@ -115,7 +104,8 @@ class Aura implements RouterInterface
      */
     public function getMatchedParams()
     {
-        return $this->route->params;
+        $params = isset($this->routeInfo[2]) ? $this->routeInfo[2] : [];
+        return $params;
     }
 
     /**
@@ -123,7 +113,8 @@ class Aura implements RouterInterface
      */
     public function getMatchedRouteName()
     {
-        return $this->route->name;
+        $name = isset($this->routeInfo[1]) ? $this->routeInfo[1] : [];
+        return $name;
     }
 
     /**
@@ -131,6 +122,7 @@ class Aura implements RouterInterface
      */
     public function getMatchedAction()
     {
-        return $this->route->params['action'];
+        $action = isset($this->routeInfo[1]) ? $this->config['routes'][$this->routeInfo[1]]['action'] : null;
+        return $action;
     }
 }
