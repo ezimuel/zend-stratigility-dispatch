@@ -32,7 +32,8 @@ class MiddlewareDispatchTest extends TestCase
         $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 
     public function testRoutingWithCallable()
@@ -42,7 +43,8 @@ class MiddlewareDispatchTest extends TestCase
         $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/page');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 
     public function testRoutingWithClassNameAndParams()
@@ -52,10 +54,12 @@ class MiddlewareDispatchTest extends TestCase
         $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/search');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
 
         $request  = $request->withUri(new Uri('/search/test'));
-        $this->assertEquals('test', $dispatcher($request, $response, function(){}));
+        $this->assertEquals('test', $dispatcher($request, $response, function () {
+        }));
     }
 
     public function testRoutingWithContainer()
@@ -69,6 +73,7 @@ class MiddlewareDispatchTest extends TestCase
         $request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], '/test');
         $response = new Response();
 
-        $this->assertTrue($dispatcher($request, $response, function(){}));
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
     }
 }

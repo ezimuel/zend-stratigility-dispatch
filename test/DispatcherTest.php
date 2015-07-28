@@ -72,7 +72,8 @@ class DispatcherTest extends TestCase
         $dispatch       = new Dispatcher($this->router);
         $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['home']['url']);
 
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
         $this->assertTrue($result);
     }
 
@@ -93,7 +94,8 @@ class DispatcherTest extends TestCase
         $dispatch       = new Dispatcher($this->router);
         $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['home']['url']);
 
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
     }
 
     public function testDispatchCallable()
@@ -112,7 +114,8 @@ class DispatcherTest extends TestCase
         $dispatch       = new Dispatcher($this->router);
         $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['page']['url']);
 
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
         $this->assertTrue($result);
     }
 
@@ -130,7 +133,8 @@ class DispatcherTest extends TestCase
         $dispatch       = new Dispatcher($this->router);
         $this->request  = new ServerRequest(['REQUEST_METHOD' => 'GET'], [], $config['routes']['myclass']['url']);
 
-        $result = $dispatch($this->request, $this->response, function(){});
+        $result = $dispatch($this->request, $this->response, function () {
+        });
         $this->assertTrue($result);
     }
 }

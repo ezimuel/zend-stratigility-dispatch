@@ -72,7 +72,7 @@ class Aura implements RouterInterface
             }
             $data['values']['action'] = $data['action'];
             if (isset($data['methods']) && is_array($data['methods'])) {
-                $methods = implode('|', $data['methods'] );
+                $methods = implode('|', $data['methods']);
             } else {
                 $methods = 'GET';
             }

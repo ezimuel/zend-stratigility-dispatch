@@ -13,10 +13,10 @@ class BaseTest extends TestCase
     {
         $adapters = [];
         if (class_exists('Aura\Router\Router')) {
-          $adapters[] = [ 'Zend\Stratigility\Dispatch\Router\Aura' ];
+            $adapters[] = [ 'Zend\Stratigility\Dispatch\Router\Aura' ];
         }
         if (class_exists('FastRoute\RouteCollector')) {
-          $adapters[] = [ 'Zend\Stratigility\Dispatch\Router\FastRoute' ];
+            $adapters[] = [ 'Zend\Stratigility\Dispatch\Router\FastRoute' ];
         }
         return $adapters;
     }
