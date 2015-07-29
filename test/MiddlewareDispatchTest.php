@@ -76,4 +76,22 @@ class MiddlewareDispatchTest extends TestCase
         $this->assertTrue($dispatcher($request, $response, function () {
         }));
     }
+
+    public function testRoutingChildrenRoute()
+    {
+        $dispatcher = MiddlewareDispatch::factory($this->config);
+
+        $request  = new ServerRequest();
+        $request  = $request->withUri(new Uri('/children/'));
+        $response = new Response();
+
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
+
+        $request  = $request->withUri(new Uri('/children/page'));
+        $response = new Response();
+
+        $this->assertTrue($dispatcher($request, $response, function () {
+        }));
+    }
 }

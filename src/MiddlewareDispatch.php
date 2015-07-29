@@ -49,17 +49,33 @@ class MiddlewareDispatch
                 sprintf("The routes part is missing in the configuration")
             );
         }
-        foreach ($config['routes'] as $name => $data) {
-            if (!isset($data['action'])) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf("The action parameter is missing in route %s", $name)
-                );
-            }
-            if (!isset($data['url'])) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf("The url parameter is missing in route %s", $name)
-                );
-            }
+
+        array_walk($config['routes'], 'self::checkRoutes');
+    }
+
+    /**
+     * Check routes from configuration
+     *
+     * @param  array  $data
+     * @param  string $name
+     * @throws Exception\InvalidArgumentException
+     */
+    protected static function checkRoutes(array $data, $name)
+    {
+        if (!isset($data['url'])) {
+            throw new Exception\InvalidArgumentException(
+                sprintf("The url parameter is missing in route %s", $name)
+            );
+        }
+
+        if (isset($data['children'])) {
+            return array_walk($data['children'], 'self::checkRoutes');
+        }
+
+        if (!isset($data['action'])) {
+            throw new Exception\InvalidArgumentException(
+                sprintf("The action parameter is missing in route %s", $name)
+            );
         }
     }
 }
